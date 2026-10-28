@@ -16,6 +16,7 @@ import com.example.smartpantrymanager.db.DatabaseHelper;
 import com.example.smartpantrymanager.model.PantryItem;
 import com.example.smartpantrymanager.util.NavHelper;
 import com.example.smartpantrymanager.util.UiUtils;
+import com.example.smartpantrymanager.util.Prefs;
 
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
 
     private void loadItems() {
         List<PantryItem> items = db.getAllItems();
+        adapter.setHighlightExpiring(Prefs.isExpiryAlertsOn(this));
         adapter.setItems(items);
         textEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
     }

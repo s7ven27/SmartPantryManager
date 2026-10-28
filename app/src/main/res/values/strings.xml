@@ -29,4 +29,15 @@
         <item>cup</item>
         <item>pcs</item>
     </string-array>
+
+    <string name="title_recipes">Suggested Recipes</string>
+    <string name="no_recipes_match">No recipes match your pantry yet - add more ingredients</string>
+    <string name="title_settings">Settings</string>
+    <string name="setting_expiry">Highlight items expiring soon</string>
+    <string name="setting_expiry_hint">Items that expire within 3 days (or already have) show in red on your pantry list.</string>
+    <string name="expires_soon">Expiring soon: %1$s</string>
+    <string name="label_ingredients">Ingredients</string>
+    <string name="label_method">Method</string>
+    <string name="back">Back</string>
+
 </resources>

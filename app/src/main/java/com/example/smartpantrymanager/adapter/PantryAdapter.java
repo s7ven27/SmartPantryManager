@@ -1,5 +1,6 @@
 package com.example.smartpantrymanager.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,18 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         void onDelete(PantryItem item);
     }
 
+    private static final int RED = 0xFFD32F2F;
+
     private final List<PantryItem> items = new ArrayList<>();
     private final Listener listener;
+    private boolean highlightExpiring = false;
 
     public PantryAdapter(Listener listener) {
         this.listener = listener;
+    }
+
+    public void setHighlightExpiring(boolean highlight) {
+        this.highlightExpiring = highlight;
     }
 
     public void setItems(List<PantryItem> newItems) {
@@ -47,6 +55,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PantryItem item = items.get(position);
+        Context context = holder.itemView.getContext();
+
         holder.textName.setText(item.getName());
         holder.textQuantity.setText(UiUtils.formatQuantity(item.getQuantity()) + " " + item.getUnit());
 
@@ -55,8 +65,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             holder.textExpiry.setVisibility(View.GONE);
         } else {
             holder.textExpiry.setVisibility(View.VISIBLE);
-            holder.textExpiry.setText(
-                    holder.itemView.getContext().getString(R.string.expires, expiry));
+            if (highlightExpiring && UiUtils.isExpiringSoon(expiry, 3)) {
+                holder.textExpiry.setText(context.getString(R.string.expires_soon, expiry));
+                holder.textExpiry.setTextColor(RED);
+            } else {
+                holder.textExpiry.setText(context.getString(R.string.expires, expiry));
+                // rows get reused, so put the normal color back
+                holder.textExpiry.setTextColor(holder.textQuantity.getCurrentTextColor());
+            }
         }
 
         holder.itemView.setOnClickListener(v -> listener.onEdit(item));
